@@ -45,25 +45,11 @@ int main(int argc, char** argv)
     utt_started = FALSE;
     ps_start_utt(ps);
     const char* hyp;
-    short avg_th = 10000;
     for (;;) {
         /* poll some data */
         alcGetIntegerv(aldevice,ALC_CAPTURE_SAMPLES,1,&samplesIn);
         if(samplesIn>AL_MIC_CAP) {
             alcCaptureSamples(aldevice,buff,AL_MIC_CAP);
-            /* input threshold etc */
-            short avg = abs(buff[0]);
-            for(int i = 1; i<AL_MIC_CAP; i++) {
-                avg = (short)((abs(buff[i])+avg)/2);
-            }
-            avg_th = (short)(avg_th/2+avg);
-            fprintf(stderr, "%d > %d\n",avg,avg_th);
-            if(!utt_started && avg < avg_th || ignoreCounter > 0) {
-                memset(buff,0,AL_MIC_CAP);
-                if(ignoreCounter > 0) {
-                    ignoreCounter--;
-                }
-            }
             /* actual voice processing */
             ps_process_raw(ps, buff, AL_MIC_CAP, FALSE, FALSE);
             in_speech = ps_get_in_speech(ps);
