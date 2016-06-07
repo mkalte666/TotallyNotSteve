@@ -1,0 +1,3 @@
+!#/bin/sh 
+
+date +"It is %H:%M on %A, the %eth of %B %Y" | ../output/simpleSpeach
