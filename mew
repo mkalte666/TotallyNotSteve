@@ -1,0 +1,19 @@
+#!/bin/bash
+
+GUARD="steve"
+
+function guardTheLine {
+    echo "checking \"$@\""
+    echo "$@" | grep -q "$GUARD" || return;
+    echo "guard passed"
+    FILES=tasks/*.*
+    for f in $FILES; do
+        echo "checking against $f"
+        eval "$f $@" && break
+    done
+}
+
+#waits for speach lines
+while read -r line; do 
+    guardTheLine $line
+done < <(sttworker/sttworker 2>/dev/null)

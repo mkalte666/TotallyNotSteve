@@ -1,0 +1,9 @@
+#!/bin/bash
+
+function lock {
+    output/simpleSpeach "see ya. I'm gonna stay here"
+    xsecurelock
+    exit 0
+}
+
+echo "$@" | grep -q "secure" && lock || exit 1;
